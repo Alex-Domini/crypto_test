@@ -10,7 +10,10 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int = 5432
     POSTGRES_DB: str = Field(default=...)
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+    )
 
     @computed_field
     @property
@@ -19,7 +22,7 @@ class Settings(BaseSettings):
         password = urllib.parse.quote_plus(self.POSTGRES_PASSWORD)
         return (
             f"postgresql+asyncpg://"
-            f"{self.POSTGRES_USER}:@"
+            f"{self.POSTGRES_USER}:"
             f"{password}@"
             f"{self.POSTGRES_HOST}:"
             f"{self.POSTGRES_PORT}/"
@@ -31,7 +34,7 @@ class Settings(BaseSettings):
     def DATABASE_URL_SYNC(self) -> str:
         password = urllib.parse.quote_plus(self.POSTGRES_PASSWORD)
         return (
-            f"postgresql://"
+            f"postgresql+psycopg2://"
             f"{self.POSTGRES_USER}:"
             f"{password}@"
             f"{self.POSTGRES_HOST}:"

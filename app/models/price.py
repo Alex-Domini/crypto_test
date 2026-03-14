@@ -6,6 +6,8 @@ from app.core.base import Base
 
 
 class Price(Base):
+    __tablename__ = "prices"
+
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     ticker: Mapped[str] = mapped_column(String(20), index=True, nullable=False)
     price: Mapped[Decimal] = mapped_column(Numeric(18, 8), nullable=False)
