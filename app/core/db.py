@@ -5,7 +5,12 @@ from app.core.config import settings
 engine = create_async_engine(settings.DATABASE_URL_ASYNC, echo=False)
 
 AsyncSessionLocal = async_sessionmaker(
-    engine,
+    bind=engine,
     expire_on_commit=False,
     class_=AsyncSession,
 )
+
+
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        yield session
