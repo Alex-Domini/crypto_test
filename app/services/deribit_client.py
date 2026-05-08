@@ -9,7 +9,7 @@ class DeribitClient:
         self.client = client
 
     async def get_index_price(self, index_name: str) -> Decimal:
-        params = {"index_name": index_name}
+        params = {"index_name": index_name.lower()}
         response = await self.client.get(
             self.BASE_URL,
             params=params,
