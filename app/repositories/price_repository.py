@@ -21,9 +21,9 @@ class PriceRepository:
         await self.session.refresh(price_obj)
         return price_obj
 
-    async def get_all_by_ticker(self) -> list[Price]:
+    async def get_all_by_ticker(self, ticker: str) -> list[Price]:
         result = await self.session.execute(
-            select(Price).order_by(Price.timestamp.asc())
+            select(Price).where(Price.ticker == ticker).order_by(Price.timestamp.asc())
         )
         return list(result.scalars().all())
 

@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int = 5432
     POSTGRES_DB: str = Field(default=...)
 
-    REDIS_URL: str = "redis://localhost:6379/0"
+    REDIS_URL: str = Field(default=...)
 
     model_config = SettingsConfigDict(
         env_file=".env",
