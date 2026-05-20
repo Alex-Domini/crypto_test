@@ -1,12 +1,20 @@
 from fastapi import FastAPI
-from app.api.routes.price import router as all_prices
-from app.api.routes.price import router as latest_price
-from app.api.routes.price import router as price_by_date_range
+from contextlib import asynccontextmanager
+from app.api.routes.price import router as prices_router
 
-from app.tasks.price_tasks import fetch_and_save_prices
+from app.tasks.price_tasks import fetch_and_save_prices_task
 
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    fetch_and_save_prices_task.delay()
+    yield
+
+
+app = FastAPI(
+    title="Crypto Price API",
+    description="API for stored BTC_USD and ETH_USD prices from Deribit",
+)
 
 
 @app.get("/")
@@ -14,8 +22,4 @@ def home_page():
     return {"message": "Привет!"}
 
 
-app.include_router(all_prices)
-app.include_router(latest_price)
-app.include_router(price_by_date_range)
-
-fetch_and_save_prices.delay()
+app.include_router(prices_router)

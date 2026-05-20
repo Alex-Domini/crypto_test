@@ -23,5 +23,5 @@ async def _run_fetch_and_save_prices() -> None:
 
 
 @celery_app.task(name="app.tasks.price_tasks.fetch_and_save_prices_task")
-def fetch_and_save_prices() -> None:
+def fetch_and_save_prices_task() -> None:
     asyncio.run(_run_fetch_and_save_prices())
