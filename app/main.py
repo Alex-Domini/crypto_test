@@ -1,14 +1,5 @@
 from fastapi import FastAPI
-from contextlib import asynccontextmanager
 from app.api.routes.price import router as prices_router
-
-from app.tasks.price_tasks import fetch_and_save_prices_task
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    fetch_and_save_prices_task.delay()
-    yield
 
 
 app = FastAPI(

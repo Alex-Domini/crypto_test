@@ -8,6 +8,7 @@ class PriceBase(BaseModel):
     price: Decimal = Field(..., max_digits=18, decimal_places=2, examples=["0.00"])
     timestamp: int
 
+    # человекочитаемое время, не храня его отдельно в БД
     @computed_field
     @property
     def datetime(self) -> str:

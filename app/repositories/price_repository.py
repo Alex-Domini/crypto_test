@@ -37,17 +37,15 @@ class PriceRepository:
         return result.scalar_one_or_none()
 
     async def get_by_ticker_and_date_range(
-        self,
-        ticker: str,
-        date_from: int,
-        date_to: int,
+        self, ticker: str, timestamp_from: int, timestamp_to: int
     ) -> list[Price]:
+
         result = await self.session.execute(
             select(Price)
             .where(
                 Price.ticker == ticker,
-                Price.timestamp >= date_from,
-                Price.timestamp <= date_to,
+                Price.timestamp >= timestamp_from,
+                Price.timestamp <= timestamp_to,
             )
             .order_by(Price.timestamp.asc())
         )
