@@ -1,5 +1,6 @@
 import asyncio
 import httpx
+import logging
 
 from app.celery_app import celery_app
 from app.core.db import AsyncSessionLocal, engine
@@ -7,6 +8,8 @@ from app.core.db import AsyncSessionLocal, engine
 from app.repositories.price_repository import PriceRepository
 from app.services.deribit_client import DeribitClient
 from app.services.price_service import PriceService
+
+logger = logging.getLogger(__name__)
 
 
 async def _run_fetch_and_save_prices() -> None:
@@ -20,7 +23,12 @@ async def _run_fetch_and_save_prices() -> None:
                 saved_prices = await service.fetch_and_save_prices()
 
                 for price in saved_prices:
-                    print(f"Saved: {price.ticker} {price.price} {price.timestamp}")
+                    logger.info(
+                        "Saved price: ticker=%s price=%s timestamp=%s",
+                        price.ticker,
+                        price.price,
+                        price.timestamp,
+                    )
     finally:
         await engine.dispose()
 
